@@ -8,7 +8,7 @@ import debug from 'debug';
 import http from 'http';
 import app from '../src/app.js';
 
-const debugLogger = debug('PROJECT_NAME:server');
+const debugLogger = debug('Pawprint:server');
 
 /**
  * Get port from environment and store in Express.

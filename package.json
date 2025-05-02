@@ -1,12 +1,12 @@
 {
-  "name": "PROJECT_NAME",
+  "name": "Pawprint",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "npx prisma generate && node ./bin/www",
     "devstart": "nodemon ./bin/www",
-    "serverstart": "DEBUG=PROJECT_NAME:* npm run devstart"
+    "serverstart": "DEBUG=Pawprint:* npm run devstart"
   },
   "dependencies": {
     "@prisma/client": "^5.17.0",
