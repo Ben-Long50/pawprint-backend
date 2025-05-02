@@ -4,7 +4,9 @@ import { deleteFromCloudinary } from '../utils/cloudinary.js';
 const userServices = {
   getAllUsers: async () => {
     try {
-      const users = await prisma.user.findMany();
+      const users = await prisma.user.findMany({
+        select: { username: true, id: true },
+      });
       return users;
     } catch (error) {
       throw new Error('Failed to fetch users');
@@ -26,6 +28,13 @@ const userServices = {
     try {
       const user = await prisma.user.findUnique({
         where: { id: Number(userId) },
+        select: {
+          username: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+          id: true,
+        },
       });
       return user;
     } catch (error) {
@@ -50,12 +59,10 @@ const userServices = {
         updateData.password = formData.password;
       }
 
-      const updatedUser = await prisma.user.update({
+      await prisma.user.update({
         where: { id: Number(user.id) },
         data: updateData,
       });
-
-      return updatedUser;
     } catch (error) {
       throw new Error('Failed to fetch user');
     }
@@ -130,8 +137,12 @@ const userServices = {
 
   createUser: async (userData) => {
     try {
+      const email = userData.email.split('@');
+      const username = email[0];
+
       const newUser = await prisma.user.create({
         data: {
+          username,
           googleId: userData.googleId,
           facebookId: userData.facebookId,
           firstName: userData.firstName,
@@ -149,8 +160,12 @@ const userServices = {
 
   createGuestUser: async (guestData) => {
     try {
+      const email = guestData.email.split('@');
+      const username = email[0];
+
       const newUser = await prisma.user.create({
         data: {
+          username,
           firstName: guestData.firstName,
           lastName: guestData.lastName,
           email: guestData.email,
@@ -158,6 +173,7 @@ const userServices = {
           role: 'GUEST',
         },
       });
+
       return newUser;
     } catch (error) {
       throw new Error('Failed to create user');

@@ -83,13 +83,10 @@ const userController = {
           };
           const newUser = await userServices.createUser(userData);
 
-          const splitEmail = newUser.email.split('@');
-          const defaultUsername = splitEmail[0];
-
           const defaultProfile = await profileServices.createOrUpdateProfile(
             {
               id: 'null',
-              username: defaultUsername,
+              username: newUser.username,
               petName: 'Default',
               active: true,
             },
@@ -119,15 +116,16 @@ const userController = {
       };
       const newGuestUser = await userServices.createGuestUser(guestData);
 
-      await profileServices.createOrUpdateProfile(
+      const profile = await profileServices.createOrUpdateProfile(
         {
-          id: 'null',
-          username: `${newGuestUser.firstName}_${newGuestUser.lastName}`,
+          id: null,
+          username: newGuestUser.username,
           petName: 'Default',
           active: true,
         },
         newGuestUser.id,
       );
+
       req.body.email = newGuestUser.email;
       req.body.password = uniqueIdentifier;
       next();
@@ -254,6 +252,7 @@ const userController = {
       .escape()
       .custom(async (value) => {
         const user = await userServices.getUserByEmail(value);
+
         if (user && user.googleId) {
           throw new Error(
             'An account with this email already exists using the Google sign in option',

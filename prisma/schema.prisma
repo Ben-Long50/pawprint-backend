@@ -12,8 +12,18 @@ enum UserRole {
   GUEST
 }
 
+model Session {
+  sid    String   @id @map("sid")
+  sess   Json     @map("sess")
+  expire DateTime @map("expire")
+
+  @@index([expire], name: "IDX_session_expire")
+  @@map("session")
+}
+
 model User {
   id         Int       @id @default(autoincrement())
+  username   String?   @unique
   firstName  String
   lastName   String
   googleId   String?   @unique

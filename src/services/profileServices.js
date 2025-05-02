@@ -30,7 +30,7 @@ const profileServices = {
         active,
       } = profileData;
 
-      if (id !== 'null') {
+      if (id !== null) {
         return await prisma.profile.update({
           where: { id: Number(id) },
           data: {

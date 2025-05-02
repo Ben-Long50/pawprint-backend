@@ -1,3 +1,7 @@
 /node_modules
 .env
 /public/images
+/backups
+
+/src/utils/updateProfileUsernames.js
+/src/utils/updateUserUsernames.js
